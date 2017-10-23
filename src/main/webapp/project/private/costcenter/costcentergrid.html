@@ -1,0 +1,167 @@
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+<div id="content">	
+	<div class="row custom-fontes">
+		<h4>Centro de custo:</h4>
+	</div>
+
+	<div class="row custom-row">		
+		<div class="col">
+		  	<button data-target="modal1" class="btn modal-trigger custom-bottom-edit" ng-class="{disabled: gridApi.selection.getSelectedRows().length != 1}">			
+		 	 	<i class="material-icons custom-icones">edit</i>
+		 	 </button>
+		</div>
+		<div class="col">
+			 <button data-target="modal2" class="btn modal-trigger red" ng-class="{disabled: gridApi.selection.getSelectedRows().length < 1}">
+		 	 	<i class="material-icons custom-icones">delete</i>
+			</button>
+		</div>
+		<div class="col">
+			<div class="row">
+				<div class="input-field col" style="margin-top: -9px;">				
+		    		<input type="text" class="validate" ng-model='filterValue' id="search" ng-change='filter()'>	    		
+		    		<label for="search"><i class="material-icons">search</i> Pesquisar: </label>
+		    	</div>
+		  	 </div>	
+		</div>
+	</div>
+
+	<div class="row">	
+		<div class="col s12">
+			<div class="row hoverable">	
+	   			<div id="grid1" ui-grid="gridOptions" ui-grid-edit ui-grid-pagination ui-grid-selection class="grid custom-height-grid">   			
+		   			<div class="row">
+		   				<div class="">
+		   					<br>
+							<button type="button" class="btn btn-success blue" ng-click="gridApi.pagination.previousPage()">
+								<i class="material-icons custom-icones">chevron_left</i>
+							</button>
+							<button type="button" class="btn btn-success blue" ng-click="gridApi.pagination.nextPage()">
+								<i class="material-icons custom-icones">chevron_right</i>
+							</button>
+						</div>
+					</div>
+				</div>
+	   		</div>        
+		</div>
+	</div>
+
+	<div class="row right">
+		<div class="col">
+		    <h2 data-target="modal3">
+		  		<a data-target="modal3" class="  modal-trigger btn-floating btn-large waves-effect waves-light custom-botao-acept custom-botao-add">
+		  			<i class="material-icons custom-icones">add</i>
+		  		</a>
+		  	</h2>
+		</div>
+	</div> 
+	 
+	<!-- MODAL edit grid- -->
+	<div id="modal1" class="modal hoverable bordered striped">
+		<div class="modal-content">
+			<form name="costcenterForm">
+				<div class="row">
+					<div class="col s12">			
+						<h4>Edição tipo Centro de custo:</h4>
+						<div class="row">
+							<div class="inpult-field col s6">			
+								<label for="disabled">Código:</label>
+								<input disabled id="disabled" type="number" class="validate" ng-model="gridApi.selection.getSelectedRows()[0].code">
+							</div>
+							<div class="inpult-field col s6">	
+								<label for="name">Nome:</label>	
+								<input placheolder="Nome" id="name" name="name" required ng-maxlength="255" type="text" class="validate" ng-model="gridApi.selection.getSelectedRows()[0].name">
+								<span class="help-block custom-fonts-alert" ng-class="error" ng-show="costcenterForm.name.$error.required">Campo obrigatório</span>
+					       		<span class="help-block custom-fonts-alert" ng-show="costcenterForm.name.$error.maxlength">Apenas é possivel cadastrar com no maximo 255 caracteres!</span>	
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<a  ng-disabled="costcenterForm.$invalid" class="modal-action modal-close waves-effect waves-green btn-flat green" ng-click="editCostcenter(costcenters, $index)" href="#!/costcentergrid">
+							<i class="material-icons custom-icones">save</i>
+						</a>
+					</div>
+					<div class="col">
+						<a href="#!/costcentergrid" class="modal-action modal-close waves-effect waves-red btn-flat red">
+							<i class="material-icons custom-icones">close</i>
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<!-- END edit MODAL -->
+
+	<!-- -==== MODAL Delete grid === -->
+	 <div id="modal2" class="modal hoverable bordered striped">
+		<div class="modal-content">
+			<div class="row">
+				<div class="col">
+					<p>Deseja realmente excluir? </p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<a href="#!/costcentergrid" class="modal-action modal-close waves-effect waves-green btn-flat green" ng-click="aceptdelet()">
+						<i class="material-icons custom-icones">check</i>
+					</a>
+				</div>
+				<div class="col">
+					<a href="#!/costcentergrid" class="modal-action modal-close waves-effect waves-red btn-flat red">
+						<i class="material-icons custom-icones">close</i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end modal Delete -->
+
+	<!-- Modal costcenters save -->
+	<div id="modal3" class="modal hoverable bordered striped" ng-controller="CostcenterFormCrtl">
+		<div class="modal-content">
+			<form name="costcenterForm" ng-submit="save(costcenter)">
+				<div class="row">
+					<form class="col s8">				
+						<h4>Cadastro Centro de Custo:</h4>					
+						
+						<div class="row">
+							<div class="input-field col s12">						
+								<input placeholder="Código" id="code" name="code" required type="number" class="validate" ng-model="costcenter.code" ng-maxlength="11" aria-required="true">
+			          			
+			          			<label for="code">Código:</label>
+			          			
+			          			<span class="help-block custom-fonts-alert" ng-class="error" ng-show="costcenterForm.code.$error.required">Campo obrigatório!</span>
+			          			<span class="help-block custom-fonts-alert" ng-show="costcenterForm.code.$error.maxlength">Apenas é possivel cadastrar com no maximo 11 caracteres!</span>
+			          		</div>
+			          	</div>
+			          	<div class="row">
+			          		<div class="input-field col s12">		          		
+								<input id="name" name="name" required type="text" class="validate" placeholder="Nome:"  ng-model="costcenter.name" ng-maxlength="255">
+								
+								<label for="name">Nome:</label>
+								
+								<span class="help-block custom-fonts-alert" ng-class="error" ng-show="costcenterForm.name.$error.required">Campo obrigatório</span>
+					       		<span class="help-block custom-fonts-alert" ng-show="costcenterForm.name.$error.maxlength">Apenas é possivel cadastrar com no maximo 255 caracteres!</span>	
+					        </div>
+						</div>
+					</form>
+				</div>
+				<div class="row">
+					<div class="col s3">
+						<a href="#!/costcentergrid" class="modal-action modal-close waves-effect waves-green btn-flat green" type="submit" name="action" ng-click="save(costcenter)" ng-disabled="costcenterForm.$invalid">
+						    <i class="material-icons center custom-icones">check</i>Cadastrar
+						 </a>
+					</div>
+					<div class="col s2">
+						<a href="#!/costcentergrid" class="modal-action modal-close waves-effect waves-red btn-flat red">
+							<i class="material-icons custom-icones">close</i>
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script src="js/config.js" type="text/javascript"></script>

@@ -1,0 +1,347 @@
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+<div id="content">	
+
+		
+	<div class="row custom-fontes">
+		<h4>Despesa: </h4>
+	</div>			
+	<div class="row custom-row">
+		<div class="col">
+		 	<button data-target="modal1" class="btn modal-trigger custom-bottom-edit" ng-class="{disabled: gridApi.selection.getSelectedRows().length != 1}" ng-click="loadSelects()">			
+				<i class="material-icons custom-icones">edit</i>
+			</button>	
+			
+			<button data-target="modal2" class="btn modal-trigger red" ng-class="{disabled: gridApi.selection.getSelectedRows().length < 1}">
+				<i class="material-icons custom-icones">delete</i>
+			</button>
+			
+			<button class="btn custom-bottom-download" ng-click="downloadPDFCSV()">
+				<i class="material-icons">archive</i>
+			</button>
+		</div>
+		
+		<div class="col">
+			<div class="row">
+				<div class="input-field col" style="margin-top: -9px;">				
+		    		<input type="text" class="validate" ng-model='filterValue' id="search" ng-change='filter()'>	    		
+		    		<label for="search"><i class="material-icons">search</i> Pesquisar: </label>
+		    	</div>	    	
+		  	 </div>	
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col s12">
+			<div class="row houverable">
+				<div id="grid1" ui-grid="gridOptions" ui-grid-edit ui-grid-row-edit ui-grid-cellNav ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid custom-height-grid">	   	
+		   			<div class="row">
+		   				<div class="">
+		   					<br>
+							<button type="button" class="btn btn-success blue" ng-click="gridApi.pagination.previousPage()">
+								<i class="material-icons custom-icones">chevron_left</i>
+							</button>
+							<button type="button" class="btn btn-success blue" ng-click="gridApi.pagination.nextPage()">
+								<i class="material-icons custom-icones">chevron_right</i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row ">
+		<div class="col">
+		    <h2 data-target="modal3">
+		  		<a data-target="modal3" class=" modal-trigger btn-floating btn-large waves-effect waves-light custom-botao-acept custom-botao-add" ng-click="loadSelects()">
+		  			<i class="material-icons custom-icones">add</i>
+		  		</a>
+		  	</h2>
+		</div>
+	</div> 
+	
+	<!-- MODAL edit grid- -->
+	<div id="modal1" class="modal hoverable bordered striped">
+		<div class="modal-content">
+			<form name="expenseGridCrtl">
+				<div class="row">
+				
+					<h4>Editar Despesas:</h4>
+					
+					<div class="row">	
+						<div class="input-field col s6">
+						
+				        	<input id="code" name="code" type="number" required ng-maxlength="11" class="validate" ng-model="gridApi.selection.getSelectedRows()[0].code">
+				          	<label for="adiantamento">Número:</label>
+				          	
+				          	<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseGridCrtl.code.$error.required">Campo Número obrigatório!</span>
+				          	<span class="help-block custom-fonts-alert" ng-show="expenseGridCrtl.code.$error.maxlength">Limite de caracteres ultrapassados, maximo 11!</span>
+				    	</div>						
+		          		<div class="input-field col s6">
+		          		
+				        	<input id="paidValue" name="paidValue" type="text" required ui-number-mask="2" class="validate" ng-model="gridApi.selection.getSelectedRows()[0].paidValue"">
+				          	<label for="adiantamento">Valor Adiantamento:</label>
+				          	
+				          	<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseGridCrtl.paidValue.$error.required">Campo Valor de adiantamento obrigatório</span>
+				    		
+				    	</div>			    					    	
+		          	</div>		    
+					<div class="row">
+						<div class="input-field  col s6">		
+																		
+							<select id="user" name="user" ng-model="expense.userOid" required ng-options="user.oid as user.name for user in users" material-select watch>
+	               				
+	               				<option value="" disabled selected>Selecione uma das opções</option>                				
+	               			</select>								
+	               			<label>Usuário:</label>            
+	               			
+	               			<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseGridCrtl.user.$error.required">Campo usuário obrigatório</span>    						
+						</div>
+						<div class="input-field  col s6">	
+												
+							<select id="type" name="type" ng-model="expense.typeOid" required ng-options="typegenre.oid as typegenre.name for typegenre in typegenres" material-select watch>
+	               				
+	               				<option value="" disabled selected>Selecione uma das opções</option>                				
+	               			</select>								
+	               			<label>Tipo Despesa:</label>                					
+	               			
+	               			<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseGridCrtl.type.$error.required">Campo tipo despesa obrigatório</span>    						
+	               				
+						</div>
+					</div>
+					<div class="row">
+						<div class="input-field col s6">
+						
+							<select id="costcenter" name="costcenter" ng-model="expense.costecenterOid" required ng-options="costcenter.oid as costcenter.name for costcenter in costcenters" material-select watch>
+								
+								<option value="" disabled selected>Selecione uma das opções</option>
+							</select>
+							<label>Centro de Custo:</label>
+							
+							<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseGridCrtl.costcenter.$error.required">Campo centro de custo obrigatório</span>    						
+							
+						</div>	
+						<div class="input-field col s6">
+							<select id="situation" name="situation" required ng-model="expense.situation">
+							
+								<option value="" disabled selected>Selecione uma das opções</option>
+								<option value=0>Aberto</option>
+								<option value=1>Concluído</option>
+								<option value=2>Aprovado</option>
+								<option value=3>Pago</option>								
+							</select>
+							<label>Situação:</label>
+							
+							<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseGridCrtl.situation.$error.required">Campo situação obrigatório</span>    						
+							
+						</div>		   	          		
+					</div>
+					<div class="row">
+						<div class="input-field col s6">
+						
+				        	<input id="reason" name="reason" required ng-maxlength="255" ng-model="gridApi.selection.getSelectedRows()[0].reason" type="text" class="validate">
+				          	<label for="reason">Objetivo da empresa:</label>
+				          	
+				          	<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseGridCrtl.reason.$error.required">Campo Objetivo da empresa obrigatório</span>
+							<span class="help-block custom-fonts-alert" ng-show="expenseGridCrtl.reason.$error.maxlength">Limite de caracteres Ultrapassados!</span>	
+				    	</div>
+				    	<div class="input-field  col s6">
+				    		<!-- DIRETIVA C via classe  --> 
+				    		<input datepicker type="text" class="datepicker" id="dateedit" required name="datepicker" ng-model="gridApi.selection.getSelectedRows()[0].date">	
+				    		
+							<label for="data">Data:</label>						
+							<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseGridCrtl.datepicker.$error.required">Campo data obrigatório</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="input-field col s6">
+						
+				        	<input id="description" name="description" required ng-maxlength="255" ng-model="gridApi.selection.getSelectedRows()[0].description" type="text" class="validate">
+				          	<label for="descricao">Descrição:</label>
+				          	
+				          	<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseGridCrtl.description.$error.required">Campo Descrição obrigatório</span>
+				          	<span class="help-block custom-fonts-alert" ng-show="expenseGridCrtl.description.$error.maxlength">Limite de caracteres ultrapassados!</span>		
+				    	</div>	
+						<div class="input-field col s6">
+						
+				        	<input id="value" name="value" required type="text" required ui-number-mask="2" ng-model="gridApi.selection.getSelectedRows()[0].value" type="number" class="validate">
+				          	<label for="valor">Valor:</label>
+				          	
+				          	<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseGridCrtl.value.$error.required">Campo valor obrigatório</span>
+				    	</div>	
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s3">				
+						<a href="#!/expensegrid" ng-disabled="expenseGridCrtl.$invalid" class="modal-action modal-close waves-effect waves-green btn-flat green" type="submit" name="action" ng-click="editExpense(expense, $index)">
+						    <i class="material-icons center custom-icones">check</i>Cadastrar
+						</a>
+					</div>
+					<div class="col s2">
+						<a href="#!/expensegrid" class="modal-action modal-close waves-effect waves-red btn-flat red">
+							<i class="material-icons custom-icones">close</i>
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<!-- END edit MODAL -->
+	
+	<!-- -==== MODAL Delete grid === -->
+	 <div id="modal2" class="modal hoverable bordered striped">
+		<div class="modal-content">
+			<div class="row">
+				<div class="col">
+					<p>Deseja realmente excluir? </p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<a href="#!/expensegrid" class="modal-action modal-close waves-effect waves-green btn-flat green" ng-click="aceptdelet()">
+						<i class="material-icons custom-icones">check</i>
+					</a>
+				</div>
+				<div class="col">
+					<a href="#!/expensegrid" class="modal-action modal-close waves-effect waves-red btn-flat red">
+						<i class="material-icons custom-icones">close</i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end modal edit -->
+	
+	<!-- Modal Expense save -->
+	<div id="modal3" class="modal hoverable bordered striped" ng-controller="ExpenseForm">
+		<div class="modal-content">
+			<form name="expenseForm" ng-submit="save(expenses)">
+				<div class="row">
+				
+					<h4>Cadastrar Despesas:</h4>
+					
+					<div class="row">	
+						<div class="input-field col s6">
+						
+				        	<input id="code" name="code" required ng-maxlength="11" type="number" class="validate" ng-model="expenses.code">
+	
+				          	<label for="adiantamento"> Número:</label>
+				          	
+				          	<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseForm.code.$error.required"> Campo Número obrigatório!</span>	   
+				          	<span class="help-block custom-fonts-alert" ng-show="expenseForm.code.$error.maxlength"> Limite de caracteres ultrapassados!</span>
+				    	</div>						
+		          		<div class="input-field col s6">
+				        	
+				        	<input type="text" id="paidValue" name="field" ng-model="expenses.paidValue" ui-number-mask="2">
+				        	
+				          	<label for="adiantamento">Valor Adiantamento: R$</label>						          	
+				          	<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseForm.paidValue.$error.paidValue"> Campo Número obrigatório!</span>
+				    	</div>				    	
+		          	</div>		    
+					<div class="row">
+						<div class="input-field  col s6">									
+							<select id="user" name="user" required ng-model="expenses.userOid" ng-options="user.oid as user.name for user in users" material-select watch>
+							
+	               				<option value="" disabled selected>Selecione uma das opções</option>                				
+	               			</select>								
+	               			
+	               			<label>Usuário:</label> 			               			
+	               			<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseForm.user.$error.required"> Campo usuário obrigatório</span>	    					    	
+	               			               						
+						</div>
+						<div class="input-field  col s6">							
+							<select id="type" name="type" ng-model="expenses.typeOid" required ng-options="typegenre.oid as typegenre.name for typegenre in typegenres" material-select watch>
+	               				
+	               				<option value="" disabled selected>Selecione uma das opções</option>                				
+	               			</select>					
+	               						
+	               			<label>Tipo Despesa:</label> 			               			
+	               			<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseForm.type.$error.required"> Campo Tipo despesa obrigatório!</span>	    					    	
+	               			              						
+						</div>
+					</div>
+					<div class="row">
+						<div class="input-field col s6">
+							<select id="costcenter" required name="costcenter" ng-model="expenses.costecenterOid" ng-options="costcenter.oid as costcenter.name for costcenter in costcenters" material-select watch>
+								
+								<option value="" disabled selected>Selecione uma das opções</option>
+							</select>
+							
+							<label>Centro de Custo:</label>									
+							<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseForm.costcenter.$error.required"> Centro de custo obrigatório!</span>	    					    	
+							
+						</div>	
+						<div class="input-field col s6">
+							<select id="situation" name="situation" ng-model="expenses.situation" required>
+							
+								<option value="" disabled selected>Selecione uma das opções</option>
+								<option value=0>Aberto</option>
+								<option value=1>Concluído</option>
+								<option value=2>Aprovado</option>
+								<option value=3>Pago</option>								
+							</select>
+							
+							<label>Situação:</label>									
+							<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseForm.situation.$error.required"> Campo Situação obrigatório!</span>	    					    	
+						</div>		   	          		
+					</div>
+					<div class="row">
+						<div class="input-field col s6">
+						
+						
+				        	<input id="reason" name="reason" ng-model="expenses.reason" type="text" class="validate">
+				        	
+				          	<label for="reason">Objetivo da empresa:</label>						          	
+				            <span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseForm.reason.$error.required">Campo data obrigatório</span>				
+				    	</div>
+				    	<div class="input-field  col s6">
+				    		<!-- DIRETIVA C via classe datepicker A -->
+				    		
+							<input datepicker type="text" class="datepicker" id="dateadd" required name="datepicker" ng-model="expenses.date">
+				    		
+							<label for="data">Data:</label>											
+							<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseForm.date.$error.required">Campo data obrigatório</span>				
+						</div>
+					</div>
+					<div class="row">
+						<div class="input-field col s6">
+						
+				        	<input id="description" name="description" ng-model="expenses.description" type="text" class="validate">
+				          	<label for="descricao">Descrição:</label>
+				          	
+				          	<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseForm.description.$error.required">Campo data obrigatório</span>				
+				          	<span class="help-block custom-fonts-alert" ng-show="expenseForm.description.$error.maxlength">Limite de caracteres ultrapassados!</span>	
+				    	</div>	
+						<div class="input-field col s6">
+							
+							<input id="value" name="value" required type="text" ng-model="expenses.value" ui-number-mask="2">	
+								        	
+				          	<label for="valor">Valor: R$</label>
+				           	<span class="help-block custom-fonts-alert" ng-class="error" ng-show="expenseForm.value.$error.required">Campo Valor obrigatório!</span>				
+				    	</div>	
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s3">
+					
+						<a href="#!/expensegrid" ng-disabled="expenseForm.$invalid" class="modal-action modal-close waves-effect waves-green btn-flat green" type="submit" name="action" ng-click="save(expenses)">
+						    <i class="material-icons center custom-icones">check</i>Cadastrar
+						</a>
+					</div>
+					<div class="col s2">
+						<a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat red">
+							<i class="material-icons custom-icones">close</i>
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+	
+<script src="js/config.js" type="text/javascript"></script>
+
+	
+	

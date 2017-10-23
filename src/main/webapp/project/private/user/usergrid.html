@@ -1,0 +1,220 @@
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+
+<div id="content">				
+				
+<div class="row custom-fontes">
+	<h4>Usuários:</h4>
+</div>
+
+<div class="row custom-row">		
+	<div class="col">
+	  	<button data-target="modal1" class="btn modal-trigger custom-bottom-edit" ng-class="{disabled: gridApi.selection.getSelectedRows().length != 1}">			
+	 	 	<i class="material-icons custom-icones">edit</i>
+	 	 </button>
+	</div>
+	<div class="col">
+		 <button data-target="modal2" class="btn modal-trigger red" ng-class="{disabled: gridApi.selection.getSelectedRows().length < 1}">
+	 	 	<i class="material-icons custom-icones">delete</i>
+		</button>
+	</div>
+	<div class="col">
+		<div class="row">
+			<div class="input-field col" style="margin-top: -9px;">				
+	    		<input type="text" class="validate" ng-model='filterValue' id="search" ng-change='filter()'>	    		
+	    		<label for="search"><i class="material-icons">search</i> Pesquisar: </label>
+	    	</div>
+	    	
+	  	 </div>	
+	</div>
+</div>
+<div class="row">	
+	<div class="col s12">
+		<div class="row hoverable">	
+   			<div id="grid1" ui-grid="gridOptions" ui-grid-edit ui-grid-pagination ui-grid-selection class="grid custom-height-grid">	   			
+	   			<div class="row">
+	   				<div class="">
+	   					<br>
+						<button type="button" class="btn btn-success blue" ng-click="gridApi.pagination.previousPage()">
+							<i class="material-icons custom-icones">chevron_left</i>
+						</button>
+						<button type="button" class="btn btn-success blue" ng-click="gridApi.pagination.nextPage()">
+							<i class="material-icons custom-icones">chevron_right</i>
+						</button>
+					</div>
+				</div>
+			</div>
+   		</div>        
+	</div>
+</div>
+
+<div class="row right">
+	<div class="col">
+	    <h2 data-target="modal3">
+	  		<a data-target="modal3" class="  modal-trigger btn-floating btn-large waves-effect waves-light custom-botao-acept custom-botao-add">
+	  			<i class="material-icons custom-icones">add</i>
+	  		</a>
+	  	</h2>
+	</div>
+</div> 
+ 
+<!-- MODAL edit grid- -->
+<div id="modal1" class="modal hoverable bordered striped">
+	<div class="modal-content">
+		<form name="userForm">
+			<div class="row">
+				<div class="col s12">	
+					
+					<div class="row">		
+						<div class="col">
+							<h4>Edição de usuário:</h4>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="inpult-field col s6">
+
+							<label for="name">Nome:</label>	
+							<input placheolder="Nome" id="name" name="name" required ng-maxlength="255" type="text" class="validate" ng-model="gridApi.selection.getSelectedRows()[0].name">
+
+							<span class="help-block custom-fonts-alert" ng-class="error" ng-show="userForm.name.$error.required">Campo obrigatório</span>
+				       		<span class="help-block custom-fonts-alert" ng-show="userForm.name.$error.maxlength">Apenas é possivel cadastrar com no maximo 255 caracteres!</span>	
+						</div>	
+						<div class="inpult-field col s6">	
+							<label for="name">Login:</label>	
+							<input placheolder="Login:" id="userLogin" name="userLogin" required ng-maxlength="255" type="text" class="validate" ng-model="gridApi.selection.getSelectedRows()[0].userLogin">
+							<span class="help-block custom-fonts-alert" ng-class="error" ng-show="userForm.userLogin.$error.required">Campo obrigatório</span>
+				       		<span class="help-block custom-fonts-alert" ng-show="userForm.userLogin.$error.maxlength">Apenas é possivel cadastrar com no maximo 255 caracteres!</span>	
+						</div>									
+					</div>
+					<div class="row">
+						<div class="input-field col s12">
+							<select id="typeUser" name="typeUser" required ng-model="user.typeUser">
+								<option value="" disabled selected>Selecione o tipo de usuário</option>
+								<option value="0">Administrador</option>
+								<option value="1">Operacional</option>						
+							</select>
+							<label>Tipo:</label>
+							<span class="help-block custom-fonts-alert" ng-class="error" ng-show="userForm.typeUser.$error.required">Seleção obrigatório</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="inpult-field col s6">	
+							<label for="password">Senha:</label>					
+							<input placheolder="Senha:" id="password" name="password"  type="password" class="validate" ng-maxlength="255" ng-model="gridApi.selection.getSelectedRows()[0].password">
+							<span class="help-block custom-fonts-alert" ng-show="userForm.password.$error.maxlength">Apenas é possivel cadastrar com no maximo 255 caracteres!</span>		
+						</div>	
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<a href="#!/usergrid" class="modal-action modal-close waves-effect waves-green btn-flat green" ng-click="editUser(users, $index)" ng-disabled="userForm.$invalid">
+						<i class="material-icons custom-icones">save</i>
+					</a>
+				</div>
+				<div class="col">
+					<a href="#!/usergrid" class="modal-action modal-close waves-effect waves-red btn-flat red">
+						<i class="material-icons custom-icones">close</i>
+					</a>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<!-- END EDIT MODAL -->
+
+<!-- -==== MODAL Delete grid === -->
+ <div id="modal2" class="modal hoverable bordered striped">
+	<div class="modal-content">
+		<div class="row">
+			<div class="col">
+				<p>Deseja realmente excluir? </p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<a href="#!/usergrid"  class="modal-action modal-close waves-effect waves-green btn-flat green" ng-click="aceptdelet()">
+					<i class="material-icons custom-icones">check</i>
+				</a>
+			</div>
+			<div class="col">
+				<a href="#!/usergrid" class="modal-action modal-close waves-effect waves-red btn-flat red">
+					<i class="material-icons custom-icones">close</i>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end modal delet -->
+
+<!-- Modal users save -->
+<div id="modal3" class="modal hoverable bordered striped" ng-controller="UserFormCrtl">
+	<div class="modal-content">
+		<form name="userForm" ng-submit="save(user)">
+			<div class="row">
+				<form class="col s8">
+					
+					<h4>Cadastro Usuários:</h4>
+					
+					<div class="row">
+						<div class="inpult-field col s6">	
+
+							<label for="name">Nome:</label>	
+							<input placheolder="Nome" id="name" name="name" required ng-maxlength="255" type="text" class="validate" ng-model="user.name">
+
+							<span class="help-block custom-fonts-alert" ng-class="error" ng-show="userForm.name.$error.required">Campo obrigatório</span>
+				       		<span class="help-block custom-fonts-alert" ng-show="userForm.name.$error.maxlength">Limite de caracteres ultrapassados!</span>	
+						</div>	
+		          	</div>
+		          	<div class="row">
+						<div class="input-field col s12">
+							<select id="typeUser" name="typeUser" required ng-model="user.typeUser">
+
+								<option value="" disabled selected>Selecione o tipo de usuário</option>
+							<option value="0">Administrador</option>
+							<option value="1">Operacional</option>						
+								</select>
+								<label>Tipo:</label>
+
+								<span class="help-block custom-fonts-alert" ng-class="error" ng-show="userForm.typeUser.$error.required">Campo usuário obrigatório</span>
+							</div>
+						</div>
+						<div class="row">
+			          		<div class="inpult-field col s6">	
+								<label for="name">Login:</label>	
+								<input placheolder="Login:" id="userLogin" name="userLogin" required ng-maxlength="255" type="text" class="validate" ng-model="user.userLogin">
+
+								<span class="help-block custom-fonts-alert" ng-class="error" ng-show="userForm.userLogin.$error.required">Campo Login obrigatório</span>
+
+					       		<span class="help-block custom-fonts-alert" ng-show="userForm.userLogin.$error.maxlength">Limite de caracteres ultrapassados!</span>	
+							</div>	
+							 <div class="inpult-field col s6">	
+								
+								<label for="password">Senha:</label>					
+								<input placheolder="Senha:" id="password" name="password" required type="password" class="validate" ng-maxlength="255" ng-model="user.password">
+								
+								<span class="help-block custom-fonts-alert" ng-class="error" ng-show="userForm.password.$error.required">Campo obrigatório</span>
+								<span class="help-block custom-fonts-alert" ng-show="userForm.password.$error.maxlength">Apenas é possivel cadastrar com no maximo 255 caracteres!</span>		
+							</div>	
+						</div>
+					</form>
+				</div>
+				<div class="row">
+					<div class="col s3">
+						<a href="#!/usergrid" class="modal-action modal-close waves-effect waves-green btn-flat green" type="submit" name="action" ng-click="save(user)" ng-disabled="userForm.$invalid">
+						    <i class="material-icons center custom-icones">check</i>Cadastrar
+						 </a>
+					</div>
+					<div class="col s2">
+						<a href="#!/usergrid" class="modal-action modal-close waves-effect waves-red btn-flat red">
+							<i class="material-icons custom-icones">close</i>
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script src="js/config.js" type="text/javascript"></script>
+
